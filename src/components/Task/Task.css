@@ -59,6 +59,7 @@
 
 .todo-list li label {
   display: flex;
+  gap: 10px;
   align-items: center;
   justify-content: space-between;
   padding: 15px 85px 15px 60px;
@@ -124,3 +125,40 @@
 .todo-list li.editing:last-child {
   margin-bottom: -1px;
 }
+
+.container-timer {
+  display: flex;
+  gap: 7px;
+}
+
+.todo-list li .icon-pause,
+.todo-list li .icon-play {
+  position: static;
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+  margin: 0 auto;
+}
+
+/* .todo-list li .icon-pause {
+
+} */
+
+/* .todo-list li .icon-play {
+	font-size: 15px;
+} */
+
+.icon-pause:after {
+	content: '⏸';
+  width: 15px;
+  height: 15px;
+}
+
+.icon-play:after {
+	content: '▶';
+}
+
+.time-text {
+  font-size: 14px;
+}
+
