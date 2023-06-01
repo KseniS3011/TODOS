@@ -24,6 +24,9 @@ class App extends Component {
   state = {
     targetId: '',
     inputValue: '',
+    hoursValue: '',
+    minutesValue: '',
+    secondsValue: '',
     inputTaskValue: '',
     isSelected: 'All',
     isEditing: false,
@@ -35,11 +38,26 @@ class App extends Component {
   handleFilterOnClick = (e) => this.setState(() => ({ isSelected: e.target.textContent }))
 
   handleAddTask = (value) => {
+    const minutes = +this.state.minutesValue
+    let newMinutes
+    let newHours
+    if (minutes > 60) {
+      newMinutes = minutes % 60
+      newHours = Math.trunc(minutes / 60)
+    } else {
+      newMinutes = minutes
+      newHours = ''
+    }
     const newTask = {
       value,
       id: this.newId++,
       isCompleted: false,
       whenCreated: new Date(),
+      seconds: this.state.secondsValue,
+      minutes: newMinutes,
+      hours: newHours,
+      isPlay: false,
+      isPaused: false,
     }
     const newTasksList = [...this.state.tasks, newTask]
     this.setState((prevState) => ({ ...prevState, tasks: newTasksList }))
@@ -58,18 +76,30 @@ class App extends Component {
 
   handleInputChange = (e) => {
     if (e.target.id === 'newTaskFormInput') {
-      return this.setState({ inputValue: e.target.value })
+      this.setState({ inputValue: e.target.value })
     }
-    return this.setState({ inputTaskValue: e.target.value })
+    if (e.target.id === 'min') {
+      this.setState({ minutesValue: e.target.value })
+    }
+    if (e.target.id === 'sec') {
+      this.setState({ secondsValue: e.target.value })
+    }
+    this.setState({ inputTaskValue: e.target.value })
   }
 
   handleSubmit = (e, id) => {
     e.preventDefault()
     const value = this.state.inputValue.trim()
     const newValueTask = this.state.inputTaskValue.trim()
-    if (e.target.id === 'newTaskForm' && value) {
+    if (e.target.id === 'newTaskForm') {
       this.handleAddTask(value)
-      this.setState(() => ({ inputValue: '' }))
+      this.setState((prevState) => ({
+        ...prevState,
+        inputValue: '',
+        hoursValue: '',
+        minutesValue: '',
+        secondsValue: '',
+      }))
     } else if (e.target.id !== 'newTaskForm' && newValueTask) {
       const index = this.state.tasks.findIndex((task) => task.id === id)
       const taskWithNewValue = {
@@ -121,6 +151,8 @@ class App extends Component {
           <h1>Todos</h1>
           <NewTaskForm
             inputValue={this.state.inputValue}
+            minutes={this.state.minutesValue}
+            seconds={this.state.secondsValue}
             handleSubmit={this.handleSubmit}
             handleInputChange={this.handleInputChange}
           />
@@ -137,6 +169,7 @@ class App extends Component {
             handleEditTask={this.handleEditTask}
             handleCompleteTask={this.handleCompleteTask}
             handleDeleteTask={this.handleDeleteTask}
+            handleClick={this.handleClickPlayPause}
           />
           <Footer
             activeTasks={activeTasks}

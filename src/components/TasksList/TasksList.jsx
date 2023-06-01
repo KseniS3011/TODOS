@@ -15,6 +15,7 @@ function TasksList(props) {
     handleEditTask,
     isEditing,
     targetId,
+    handleClick,
   } = props
 
   TasksList.defaultProps = {
@@ -54,6 +55,7 @@ function TasksList(props) {
             handleDeleteTask={handleDeleteTask}
             handleCompleteTask={handleCompleteTask}
             handleEditTask={handleEditTask}
+            handleClick={handleClick}
           />
           <form onSubmit={(e) => handleSubmit(e, task.id)}>
             {isEditing ? (
